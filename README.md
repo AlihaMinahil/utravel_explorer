@@ -1,16 +1,38 @@
-# utravel_explorer
+# UTravel Explorer
 
-A new Flutter project.
+A Flutter-based Travel Destination Explorer application developed for the CODIORA House Mobile Application Development Internship – Week 2 Task.
 
-## Getting Started
+## 📱 Features
 
-This project is a starting point for a Flutter application.
+- Splash Screen
+- Home Screen
+- Destination Listing
+- Destination Search
+- Category Filtering
+- Destination Details Screen
+- Smooth Navigation
+- Responsive UI
 
-A few resources to get you started if this is your first Flutter project:
+## 🛠️ Tech Stack
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- Flutter
+- Dart
+- Material Design
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 📂 Project Structure
+
+```
+lib/
+├── main.dart
+├── splash_screen.dart
+├── home_screen.dart
+├── DestinationsScreen.dart
+├── destination_detail_screen.dart
+└── categories_screen.dart
+```
+
+## 🚀 Developed By
+
+**Aliha Minahil**
+
+CODIORA House Internship – Week 2
