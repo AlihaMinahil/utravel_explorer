@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+
 import 'DestinationsScreen.dart';
 import 'categories_screen.dart';
+import 'favorites_screen.dart';
+import 'recently_viewed_screen.dart';
+import 'profile_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -11,6 +15,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late final ScrollController _mainScrollController;
+
   int _selectedFilterIndex = 0;
   int _currentNavIndex = 0;
 
@@ -19,7 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
     'Popular',
     'Recommended',
     'Trending',
-    'Most Visited'
+    'Most Visited',
   ];
 
   final List<Map<String, String>> _popularPlaces = const [
@@ -61,6 +66,10 @@ class _HomeScreenState extends State<HomeScreen> {
     super.dispose();
   }
 
+  // ============================================================
+  // DESTINATIONS
+  // ============================================================
+
   void _navigateToDestinations(BuildContext context) {
     Navigator.push(
       context,
@@ -69,6 +78,10 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+
+  // ============================================================
+  // CATEGORIES
+  // ============================================================
 
   void _navigateToCategories(BuildContext context) {
     Navigator.push(
@@ -79,19 +92,116 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  void _onBottomNavTapped(int index) {
-    setState(() {
-      _currentNavIndex = index;
-    });
-    if (index == 1) {
-      _navigateToDestinations(context);
-    } else if (index == 2) {
-      _navigateToCategories(context);
+  // ============================================================
+  // FAVORITES
+  // ============================================================
+
+  void _navigateToFavorites(BuildContext context) async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const FavoritesScreen(),
+      ),
+    );
+
+    if (mounted) {
+      setState(() {
+        _currentNavIndex = 0;
+      });
     }
   }
 
+  // ============================================================
+  // RECENTLY VIEWED
+  // ============================================================
+
+  void _navigateToRecentlyViewed(BuildContext context) async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const RecentlyViewedScreen(),
+      ),
+    );
+
+    if (mounted) {
+      setState(() {
+        _currentNavIndex = 0;
+      });
+    }
+  }
+
+  // ============================================================
+  // PROFILE
+  // ============================================================
+
+  void _navigateToProfile(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const ProfileScreen(),
+      ),
+    );
+  }
+
+  // ============================================================
+  // BOTTOM NAVIGATION
+  // ============================================================
+
+  void _onBottomNavTapped(int index) {
+    // HOME
+    if (index == 0) {
+      setState(() {
+        _currentNavIndex = 0;
+      });
+    }
+
+    // EXPLORE
+    else if (index == 1) {
+      setState(() {
+        _currentNavIndex = 1;
+      });
+
+      _navigateToDestinations(context);
+    }
+
+    // FAVORITES
+    else if (index == 2) {
+      setState(() {
+        _currentNavIndex = 2;
+      });
+
+      _navigateToFavorites(context);
+    }
+
+    // RECENTLY VIEWED
+    else if (index == 3) {
+      setState(() {
+        _currentNavIndex = 3;
+      });
+
+      _navigateToRecentlyViewed(context);
+    }
+
+    // PROFILE
+    else if (index == 4) {
+      setState(() {
+        _currentNavIndex = 4;
+      });
+
+      _navigateToProfile(context);
+    }
+  }
+
+  // ============================================================
+  // CATEGORY CARD
+  // ============================================================
+
   Widget _buildCategoryCard(
-      BuildContext context, String title, IconData icon, Color color) {
+      BuildContext context,
+      String title,
+      IconData icon,
+      Color color,
+      ) {
     return GestureDetector(
       onTap: () => _navigateToCategories(context),
       child: Container(
@@ -118,7 +228,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 color: color.withOpacity(0.12),
                 shape: BoxShape.circle,
               ),
-              child: Icon(icon, color: color, size: 22),
+              child: Icon(
+                icon,
+                color: color,
+                size: 22,
+              ),
             ),
             const SizedBox(height: 8),
             Text(
@@ -137,10 +251,19 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  // ============================================================
+  // BUILD
+  // ============================================================
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBody: true,
+
+      // ========================================================
+      // BODY
+      // ========================================================
+
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -166,11 +289,17 @@ class _HomeScreenState extends State<HomeScreen> {
               physics: const AlwaysScrollableScrollPhysics(
                 parent: BouncingScrollPhysics(),
               ),
-              padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20,
+                vertical: 10,
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // 1. Sleek Top Bar
+                  // ==================================================
+                  // 1. TOP BAR
+                  // ==================================================
+
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -181,7 +310,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               border: Border.all(
-                                color: const Color(0xFF2563EB).withOpacity(0.25),
+                                color: const Color(0xFF2563EB)
+                                    .withOpacity(0.25),
                                 width: 2.5,
                               ),
                             ),
@@ -193,9 +323,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                           const SizedBox(width: 12),
-                          Column(
+                          const Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            children: const [
+                            children: [
                               Text(
                                 'Welcome back,',
                                 style: TextStyle(
@@ -243,9 +373,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ],
                   ),
+
                   const SizedBox(height: 28),
 
-                  // 2. Main Heading
+                  // ==================================================
+                  // 2. MAIN HEADING
+                  // ==================================================
+
                   RichText(
                     text: const TextSpan(
                       children: [
@@ -272,11 +406,18 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
                   ),
+
                   const SizedBox(height: 22),
 
-                  // 3. Search Bar
+                  // ==================================================
+                  // 3. SEARCH BAR
+                  // ==================================================
+
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 6),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 18,
+                      vertical: 6,
+                    ),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(30),
@@ -290,16 +431,28 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     child: const TextField(
                       decoration: InputDecoration(
-                        icon: Icon(Icons.search_rounded, color: Color(0xFF2563EB), size: 26),
+                        icon: Icon(
+                          Icons.search_rounded,
+                          color: Color(0xFF2563EB),
+                          size: 26,
+                        ),
                         hintText: 'Search destinations...',
-                        hintStyle: TextStyle(color: Color(0xFF94A3B8), fontSize: 15, fontWeight: FontWeight.w400),
+                        hintStyle: TextStyle(
+                          color: Color(0xFF94A3B8),
+                          fontSize: 15,
+                          fontWeight: FontWeight.w400,
+                        ),
                         border: InputBorder.none,
                       ),
                     ),
                   ),
+
                   const SizedBox(height: 24),
 
-                  // 4. Quick Filter Chips
+                  // ==================================================
+                  // 4. FILTERS
+                  // ==================================================
+
                   SizedBox(
                     height: 40,
                     child: ListView.builder(
@@ -307,7 +460,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       physics: const BouncingScrollPhysics(),
                       itemCount: _filters.length,
                       itemBuilder: (context, index) {
-                        final isSelected = _selectedFilterIndex == index;
+                        final bool isSelected =
+                            _selectedFilterIndex == index;
+
                         return GestureDetector(
                           onTap: () {
                             setState(() {
@@ -318,7 +473,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             duration: const Duration(milliseconds: 200),
                             margin: const EdgeInsets.only(right: 12),
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 8),
+                              horizontal: 20,
+                              vertical: 8,
+                            ),
                             decoration: BoxDecoration(
                               color: isSelected
                                   ? const Color(0xFF0F172A)
@@ -327,17 +484,18 @@ class _HomeScreenState extends State<HomeScreen> {
                               boxShadow: isSelected
                                   ? [
                                 BoxShadow(
-                                  color: const Color(0xFF0F172A).withOpacity(0.3),
+                                  color: const Color(0xFF0F172A)
+                                      .withOpacity(0.3),
                                   blurRadius: 12,
                                   offset: const Offset(0, 4),
-                                )
+                                ),
                               ]
                                   : [
                                 BoxShadow(
                                   color: Colors.black.withOpacity(0.03),
                                   blurRadius: 5,
                                   offset: const Offset(0, 2),
-                                )
+                                ),
                               ],
                               border: Border.all(
                                 color: isSelected
@@ -349,7 +507,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: Text(
                                 _filters[index],
                                 style: TextStyle(
-                                  color: isSelected ? Colors.white : const Color(0xFF475569),
+                                  color: isSelected
+                                      ? Colors.white
+                                      : const Color(0xFF475569),
                                   fontSize: 14,
                                   fontWeight: isSelected
                                       ? FontWeight.w600
@@ -362,9 +522,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       },
                     ),
                   ),
+
                   const SizedBox(height: 30),
 
-                  // 5. Featured Destination Header
+                  // ==================================================
+                  // 5. FEATURED DESTINATION
+                  // ==================================================
+
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -377,20 +541,22 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                       TextButton(
-                        onPressed: () => _navigateToDestinations(context),
+                        onPressed: () =>
+                            _navigateToDestinations(context),
                         child: const Text(
                           'View All',
                           style: TextStyle(
-                              color: Color(0xFF2563EB),
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold),
+                            color: Color(0xFF2563EB),
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ],
                   ),
+
                   const SizedBox(height: 12),
 
-                  // Featured Card
                   GestureDetector(
                     onTap: () => _navigateToDestinations(context),
                     child: Container(
@@ -411,7 +577,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             children: [
                               ClipRRect(
                                 borderRadius: const BorderRadius.vertical(
-                                    top: Radius.circular(24)),
+                                  top: Radius.circular(24),
+                                ),
                                 child: Image.network(
                                   'https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?q=80&w=1000&auto=format&fit=crop',
                                   height: 190,
@@ -424,23 +591,31 @@ class _HomeScreenState extends State<HomeScreen> {
                                 right: 14,
                                 child: Container(
                                   padding: const EdgeInsets.symmetric(
-                                      horizontal: 12, vertical: 6),
+                                    horizontal: 12,
+                                    vertical: 6,
+                                  ),
                                   decoration: BoxDecoration(
                                     color: Colors.black.withOpacity(0.4),
                                     borderRadius: BorderRadius.circular(20),
-                                    border: Border.all(color: Colors.white.withOpacity(0.2)),
+                                    border: Border.all(
+                                      color: Colors.white.withOpacity(0.2),
+                                    ),
                                   ),
                                   child: const Row(
                                     children: [
-                                      Icon(Icons.location_on,
-                                          color: Colors.white, size: 14),
+                                      Icon(
+                                        Icons.location_on,
+                                        color: Colors.white,
+                                        size: 14,
+                                      ),
                                       SizedBox(width: 4),
                                       Text(
                                         'Switzerland',
                                         style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w600),
+                                          color: Colors.white,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w600,
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -449,12 +624,13 @@ class _HomeScreenState extends State<HomeScreen> {
                             ],
                           ),
                           Padding(
-                            padding: const EdgeInsets.all(18.0),
+                            padding: const EdgeInsets.all(18),
                             child: Row(
                               children: [
                                 const Expanded(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         'Swiss Alps',
@@ -483,16 +659,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                   decoration: BoxDecoration(
                                     color: const Color(0xFF0F172A),
                                     borderRadius: BorderRadius.circular(14),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: const Color(0xFF0F172A).withOpacity(0.3),
-                                        blurRadius: 8,
-                                        offset: const Offset(0, 4),
-                                      ),
-                                    ],
                                   ),
-                                  child: const Icon(Icons.arrow_forward_rounded,
-                                      color: Colors.white, size: 22),
+                                  child: const Icon(
+                                    Icons.arrow_forward_rounded,
+                                    color: Colors.white,
+                                    size: 22,
+                                  ),
                                 ),
                               ],
                             ),
@@ -501,25 +673,25 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                   ),
+
                   const SizedBox(height: 30),
 
-                  // 6. Promotional Banner
+                  // ==================================================
+                  // 6. PROMOTIONAL BANNER
+                  // ==================================================
+
                   Container(
                     padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
                       gradient: const LinearGradient(
-                        colors: [Color(0xFF2563EB), Color(0xFF1D4ED8)],
+                        colors: [
+                          Color(0xFF2563EB),
+                          Color(0xFF1D4ED8),
+                        ],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ),
                       borderRadius: BorderRadius.circular(20),
-                      boxShadow: [
-                        BoxShadow(
-                          color: const Color(0xFF2563EB).withOpacity(0.3),
-                          blurRadius: 15,
-                          offset: const Offset(0, 8),
-                        ),
-                      ],
                     ),
                     child: Row(
                       children: [
@@ -554,17 +726,26 @@ class _HomeScreenState extends State<HomeScreen> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),
-                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                             elevation: 0,
                           ),
-                          child: const Text('Claim', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+                          child: const Text(
+                            'Claim',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                            ),
+                          ),
                         ),
                       ],
                     ),
                   ),
+
                   const SizedBox(height: 30),
 
-                  // 7. Top Categories Header
+                  // ==================================================
+                  // 7. TOP CATEGORIES
+                  // ==================================================
+
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -581,47 +762,81 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: const Text(
                           'View All',
                           style: TextStyle(
-                              color: Color(0xFF2563EB),
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold),
+                            color: Color(0xFF2563EB),
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ],
                   ),
+
                   const SizedBox(height: 12),
 
-                  // Horizontal Categories Bar
                   SizedBox(
                     height: 105,
                     child: ListView(
                       scrollDirection: Axis.horizontal,
                       physics: const BouncingScrollPhysics(),
                       children: [
-                        _buildCategoryCard(context, 'Beach',
-                            Icons.beach_access_rounded, const Color(0xFF06B6D4)),
-                        _buildCategoryCard(context, 'Mountains',
-                            Icons.landscape_rounded, const Color(0xFF3B82F6)),
-                        _buildCategoryCard(context, 'Adventure',
-                            Icons.hiking_rounded, const Color(0xFFF97316)),
                         _buildCategoryCard(
-                            context,
-                            'Historical',
-                            Icons.account_balance_rounded,
-                            const Color(0xFFA855F7)),
-                        _buildCategoryCard(context, 'Desert',
-                            Icons.wb_sunny_rounded, const Color(0xFFEAB308)),
-                        _buildCategoryCard(context, 'Camping',
-                            Icons.campaign_rounded, const Color(0xFF10B981)),
-                        _buildCategoryCard(context, 'Forest', Icons.park_rounded,
-                            const Color(0xFF059669)),
-                        _buildCategoryCard(context, 'City',
-                            Icons.location_city_rounded, const Color(0xFF6366F1)),
+                          context,
+                          'Beach',
+                          Icons.beach_access_rounded,
+                          const Color(0xFF06B6D4),
+                        ),
+                        _buildCategoryCard(
+                          context,
+                          'Mountains',
+                          Icons.landscape_rounded,
+                          const Color(0xFF3B82F6),
+                        ),
+                        _buildCategoryCard(
+                          context,
+                          'Adventure',
+                          Icons.hiking_rounded,
+                          const Color(0xFFF97316),
+                        ),
+                        _buildCategoryCard(
+                          context,
+                          'Historical',
+                          Icons.account_balance_rounded,
+                          const Color(0xFFA855F7),
+                        ),
+                        _buildCategoryCard(
+                          context,
+                          'Desert',
+                          Icons.wb_sunny_rounded,
+                          const Color(0xFFEAB308),
+                        ),
+                        _buildCategoryCard(
+                          context,
+                          'Camping',
+                          Icons.campaign_rounded,
+                          const Color(0xFF10B981),
+                        ),
+                        _buildCategoryCard(
+                          context,
+                          'Forest',
+                          Icons.park_rounded,
+                          const Color(0xFF059669),
+                        ),
+                        _buildCategoryCard(
+                          context,
+                          'City',
+                          Icons.location_city_rounded,
+                          const Color(0xFF6366F1),
+                        ),
                       ],
                     ),
                   ),
+
                   const SizedBox(height: 30),
 
-                  // 8. Popular Places Horizontal Cards
+                  // ==================================================
+                  // 8. POPULAR PLACES
+                  // ==================================================
+
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -634,32 +849,40 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                       TextButton(
-                        onPressed: () => _navigateToDestinations(context),
+                        onPressed: () =>
+                            _navigateToDestinations(context),
                         child: const Text(
                           'See More',
                           style: TextStyle(
-                              color: Color(0xFF2563EB),
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold),
+                            color: Color(0xFF2563EB),
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ],
                   ),
+
                   const SizedBox(height: 12),
 
                   SizedBox(
-                    height: 255, // Height updated to fix bottom overflow
+                    height: 255,
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
                       physics: const BouncingScrollPhysics(),
                       itemCount: _popularPlaces.length,
                       itemBuilder: (context, index) {
                         final place = _popularPlaces[index];
+
                         return GestureDetector(
-                          onTap: () => _navigateToDestinations(context),
+                          onTap: () =>
+                              _navigateToDestinations(context),
                           child: Container(
                             width: 175,
-                            margin: const EdgeInsets.only(right: 16, bottom: 8),
+                            margin: const EdgeInsets.only(
+                              right: 16,
+                              bottom: 8,
+                            ),
                             decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(20),
@@ -672,11 +895,14 @@ class _HomeScreenState extends State<HomeScreen> {
                               ],
                             ),
                             child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                              crossAxisAlignment:
+                              CrossAxisAlignment.start,
                               children: [
                                 ClipRRect(
-                                  borderRadius: const BorderRadius.vertical(
-                                      top: Radius.circular(20)),
+                                  borderRadius:
+                                  const BorderRadius.vertical(
+                                    top: Radius.circular(20),
+                                  ),
                                   child: Image.network(
                                     place['image']!,
                                     height: 125,
@@ -685,9 +911,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.all(12.0),
+                                  padding: const EdgeInsets.all(12),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         place['title']!,
@@ -702,16 +929,22 @@ class _HomeScreenState extends State<HomeScreen> {
                                       const SizedBox(height: 4),
                                       Row(
                                         children: [
-                                          const Icon(Icons.location_on,
-                                              size: 13, color: Color(0xFF94A3B8)),
+                                          const Icon(
+                                            Icons.location_on,
+                                            size: 13,
+                                            color: Color(0xFF94A3B8),
+                                          ),
                                           const SizedBox(width: 4),
                                           Expanded(
                                             child: Text(
                                               place['location']!,
                                               style: const TextStyle(
-                                                  fontSize: 12, color: Color(0xFF64748B)),
+                                                fontSize: 12,
+                                                color: Color(0xFF64748B),
+                                              ),
                                               maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
+                                              overflow:
+                                              TextOverflow.ellipsis,
                                             ),
                                           ),
                                         ],
@@ -730,31 +963,43 @@ class _HomeScreenState extends State<HomeScreen> {
                                             ),
                                           ),
                                           Container(
-                                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                                            padding:
+                                            const EdgeInsets.symmetric(
+                                              horizontal: 6,
+                                              vertical: 3,
+                                            ),
                                             decoration: BoxDecoration(
-                                              color: const Color(0xFFFFFBEB),
-                                              borderRadius: BorderRadius.circular(6),
+                                              color:
+                                              const Color(0xFFFFFBEB),
+                                              borderRadius:
+                                              BorderRadius.circular(6),
                                             ),
                                             child: Row(
                                               children: [
-                                                const Icon(Icons.star_rounded,
-                                                    size: 14, color: Colors.amber),
+                                                const Icon(
+                                                  Icons.star_rounded,
+                                                  size: 14,
+                                                  color: Colors.amber,
+                                                ),
                                                 const SizedBox(width: 4),
                                                 Text(
                                                   place['rating']!,
                                                   style: const TextStyle(
-                                                      fontSize: 12,
-                                                      fontWeight: FontWeight.bold,
-                                                      color: Color(0xFFB45309)),
+                                                    fontSize: 12,
+                                                    fontWeight:
+                                                    FontWeight.bold,
+                                                    color:
+                                                    Color(0xFFB45309),
+                                                  ),
                                                 ),
                                               ],
                                             ),
-                                          )
+                                          ),
                                         ],
-                                      )
+                                      ),
                                     ],
                                   ),
-                                )
+                                ),
                               ],
                             ),
                           ),
@@ -763,6 +1008,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
 
+                  // Bottom navigation ke liye space
                   const SizedBox(height: 120),
                 ],
               ),
@@ -771,16 +1017,23 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
 
-      // Floating Bottom Navigation Bar
+      // ============================================================
+      // FLOATING BOTTOM NAVIGATION
+      // ============================================================
+
       bottomNavigationBar: Container(
-        margin: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
+        margin: const EdgeInsets.only(
+          left: 20,
+          right: 20,
+          bottom: 20,
+        ),
         height: 65,
         decoration: BoxDecoration(
           color: const Color(0xFF0F172A),
           borderRadius: BorderRadius.circular(30),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.2),
+              color: Colors.black.withOpacity(0.20),
               blurRadius: 20,
               offset: const Offset(0, 10),
             ),
@@ -789,37 +1042,97 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
+            // ======================================================
+            // HOME
+            // ======================================================
+
             IconButton(
+              onPressed: () {
+                _onBottomNavTapped(0);
+              },
               icon: Icon(
-                Icons.home_rounded,
-                color: _currentNavIndex == 0 ? const Color(0xFF3B82F6) : Colors.white60,
+                _currentNavIndex == 0
+                    ? Icons.home_rounded
+                    : Icons.home_outlined,
+                color: _currentNavIndex == 0
+                    ? const Color(0xFF3B82F6)
+                    : Colors.white60,
                 size: 26,
               ),
-              onPressed: () => _onBottomNavTapped(0),
             ),
+
+            // ======================================================
+            // EXPLORE
+            // ======================================================
+
             IconButton(
+              onPressed: () {
+                _onBottomNavTapped(1);
+              },
               icon: Icon(
-                Icons.explore_rounded,
-                color: _currentNavIndex == 1 ? const Color(0xFF3B82F6) : Colors.white60,
+                _currentNavIndex == 1
+                    ? Icons.explore_rounded
+                    : Icons.explore_outlined,
+                color: _currentNavIndex == 1
+                    ? const Color(0xFF3B82F6)
+                    : Colors.white60,
                 size: 26,
               ),
-              onPressed: () => _onBottomNavTapped(1),
             ),
+
+            // ======================================================
+            // FAVORITES
+            // ======================================================
+
             IconButton(
+              onPressed: () {
+                _onBottomNavTapped(2);
+              },
               icon: Icon(
-                Icons.grid_view_rounded,
-                color: _currentNavIndex == 2 ? const Color(0xFF3B82F6) : Colors.white60,
-                size: 26,
+                _currentNavIndex == 2
+                    ? Icons.favorite_rounded
+                    : Icons.favorite_border_rounded,
+                color: _currentNavIndex == 2
+                    ? const Color(0xFFEF4444)
+                    : Colors.white60,
+                size: 25,
               ),
-              onPressed: () => _onBottomNavTapped(2),
             ),
+
+            // ======================================================
+            // RECENT
+            // ======================================================
+
             IconButton(
-              icon: const Icon(
-                Icons.person_rounded,
-                color: Colors.white60,
-                size: 26,
+              onPressed: () {
+                _onBottomNavTapped(3);
+              },
+              icon: Icon(
+                Icons.history_rounded,
+                color: _currentNavIndex == 3
+                    ? const Color(0xFF3B82F6)
+                    : Colors.white60,
+                size: 25,
               ),
-              onPressed: () {},
+            ),
+
+            // ======================================================
+            // PROFILE
+            // ======================================================
+
+            IconButton(
+              onPressed: () {
+                _onBottomNavTapped(4);
+              },
+              icon: Icon(
+                _currentNavIndex == 4
+                    ? Icons.person_rounded
+                    : Icons.person_outline_rounded,
+                color: _currentNavIndex == 4
+                    ? const Color(0xFF3B82F6)
+                    : Colors.white60,
+                size: 25,
+              ),
             ),
           ],
         ),

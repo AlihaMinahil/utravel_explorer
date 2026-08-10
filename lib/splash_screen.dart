@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:utravel_explorer/login_screen.dart';
+import 'package:utravel_explorer/signup_screen.dart';
 import 'home_screen.dart'; // HomeScreen import karo
 
 class SplashScreen extends StatefulWidget {
@@ -20,7 +22,7 @@ class _SplashScreenState extends State<SplashScreen> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => const HomeScreen(),
+          builder: (context) => const SignupScreen(),
         ),
       );
     });
