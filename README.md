@@ -19,6 +19,16 @@ A Flutter-based Travel Destination Explorer application developed for the CODIOR
 - **Favorites Screen**
 - **Recently Viewed Destinations**
 
+### 🔹 Week 4 Task
+- **Create Trip Screen**
+- **My Trips Screen**
+- **Trip Details Screen**
+- **Daily Itinerary Management**
+- **Add Activity Screen**
+- **Edit Activity Screen**
+- **Activity Details Screen**
+- **Trip & Activity Management**
+
 ---
 
 ## 🛠️ Tech Stack
@@ -42,4 +52,12 @@ lib/
 ├── profile_screen.dart
 ├── edit_profile_screen.dart
 ├── favorites_screen.dart
-└── recently_viewed_screen.dart
+├── recently_viewed_screen.dart
+│
+├── create_trip_screen.dart
+├── my_trips_screen.dart
+├── trip_details_screen.dart
+├── daily_itinerary_screen.dart
+├── add_activity_screen.dart
+├── edit_activity_screen.dart
+└── activity_details_screen.dart
